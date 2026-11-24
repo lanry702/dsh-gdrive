@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Privacy Policy — dsh-gdrive</title>
+<style>
+  :root { color-scheme: light dark; --fg:#1c2024; --dim:#5b6570; --line:#e3e6ea; --bg:#fdfdfc; --accent:#3f6ad8; --code:#f4f5f7; }
+  @media (prefers-color-scheme: dark) { :root { --fg:#e6e8ea; --dim:#9aa4ae; --line:#2c3238; --bg:#14171a; --accent:#7ea2ff; --code:#1c2126; } }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--bg); color:var(--fg); font:16px/1.65 -apple-system, "Segoe UI", system-ui, sans-serif; }
+  main { max-width: 44rem; margin: 0 auto; padding: 4rem 1.5rem 6rem; }
+  h1 { font-size: 1.8rem; margin: 0 0 .3rem; letter-spacing:-.02em; }
+  .sub { color: var(--dim); margin: 0 0 2.5rem; font-size: .92rem; }
+  h2 { font-size: 1.05rem; margin: 2.4rem 0 .7rem; }
+  code { background: var(--code); padding: .12em .38em; border-radius: 4px; font-size: .88em; font-family: ui-monospace, "Cascadia Code", Consolas, monospace; }
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  ul { padding-left: 1.2rem; }
+  li { margin: .35rem 0; }
+  footer { margin-top: 3.5rem; padding-top: 1.2rem; border-top: 1px solid var(--line); font-size: .85rem; color: var(--dim); }
+</style>
+</head>
+<body>
+<main>
+  <h1>Privacy Policy — dsh-gdrive</h1>
+  <p class="sub">Last updated: 2026-11-24 · <a href="./">back to overview</a></p>
+
+  <p><code>dsh-gdrive</code> is a local plugin for DeepSeek Harness (DSH). It is not a hosted service:
+  the program runs on the user's own computer, and the OAuth client used to sign in belongs to the
+  user's own Google Cloud project.</p>
+
+  <h2>What this app accesses</h2>
+  <p>When the user completes Google's consent screen, the app receives an OAuth refresh token for the
+  scopes shown on that screen. In the default configuration:</p>
+  <ul>
+    <li><code>https://www.googleapis.com/auth/drive</code> — see, edit, create and delete the user's Google Drive files</li>
+    <li><code>https://www.googleapis.com/auth/userinfo.email</code> — read the signed-in account's email address</li>
+    <li><code>openid</code></li>
+  </ul>
+  <p>The email scope is used for one thing: showing which account is authorized (<code>whoami</code>).</p>
+
+  <h2>Where data is stored</h2>
+  <p>All data stays on the user's computer:</p>
+  <ul>
+    <li><code>%DSH_HOME%\gdrive\token.json</code> — the OAuth refresh and access tokens (file permission 0600)</li>
+    <li><code>%DSH_HOME%\gdrive\cache\</code> — files downloaded on request, so local tools can read them</li>
+    <li><code>%DSH_HOME%\gdrive\gdrive.log</code> — diagnostic log of tool calls</li>
+  </ul>
+
+  <h2>What is transmitted</h2>
+  <p>Requests go only to Google's own API endpoints (<code>oauth2.googleapis.com</code>,
+  <code>www.googleapis.com</code>, <code>accounts.google.com</code>). There is no server operated by
+  this project, no analytics, no telemetry, and no third party receives the tokens or any file content.</p>
+
+  <h2>Who can see the data</h2>
+  <p>Only whoever can read the local files listed above, plus Google (through its own APIs).
+  Nothing is shared with the author of this plugin.</p>
+
+  <h2>Revoking access</h2>
+  <ul>
+    <li>Locally: delete <code>%DSH_HOME%\gdrive\token.json</code>, and remove the plugin from the DSH profile.</li>
+    <li>Remotely: open <a href="https://myaccount.google.com/permissions">myaccount.google.com/permissions</a>
+        and remove access for this app.</li>
+  </ul>
+  <p>After revocation the tokens stop working immediately; the app can no longer read or modify the
+  user's Drive.</p>
+
+  <h2>Children</h2>
+  <p>This app is a personal development tool and is not directed at children.</p>
+
+  <h2>Contact</h2>
+  <p><a href="mailto:lanry702@gmail.com">lanry702@gmail.com</a></p>
+
+  <footer>dsh-gdrive is not affiliated with Google or DeepSeek.</footer>
+</main>
+</body>
+</html>

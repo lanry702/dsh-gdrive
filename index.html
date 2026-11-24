@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>dsh-gdrive — Google Drive for DeepSeek Harness</title>
+<style>
+  :root { color-scheme: light dark; --fg:#1c2024; --dim:#5b6570; --line:#e3e6ea; --bg:#fdfdfc; --accent:#3f6ad8; --code:#f4f5f7; }
+  @media (prefers-color-scheme: dark) { :root { --fg:#e6e8ea; --dim:#9aa4ae; --line:#2c3238; --bg:#14171a; --accent:#7ea2ff; --code:#1c2126; } }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--bg); color:var(--fg); font:16px/1.65 -apple-system, "Segoe UI", system-ui, sans-serif; }
+  main { max-width: 46rem; margin: 0 auto; padding: 4rem 1.5rem 6rem; }
+  h1 { font-size: 2rem; line-height:1.25; margin: 0 0 .4rem; letter-spacing:-.02em; }
+  .sub { color: var(--dim); margin: 0 0 2.5rem; }
+  h2 { font-size: 1.05rem; margin: 2.6rem 0 .8rem; letter-spacing:.01em; }
+  p, li { color: var(--fg); }
+  .dim { color: var(--dim); }
+  code { background: var(--code); padding: .12em .38em; border-radius: 4px; font-size: .9em; font-family: ui-monospace, "Cascadia Code", Consolas, monospace; }
+  pre { background: var(--code); padding: 1rem 1.1rem; border-radius: 8px; overflow-x:auto; font-size: .84rem; line-height:1.5; }
+  pre code { background:none; padding:0; }
+  table { width:100%; border-collapse: collapse; font-size: .92rem; }
+  th, td { text-align:left; padding: .45rem .6rem; border-bottom: 1px solid var(--line); vertical-align: top; }
+  th { color: var(--dim); font-weight: 600; }
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  footer { margin-top: 4rem; padding-top: 1.2rem; border-top: 1px solid var(--line); font-size: .85rem; color: var(--dim); }
+  .tag { display:inline-block; font-size:.72rem; letter-spacing:.06em; text-transform:uppercase; color:var(--dim); border:1px solid var(--line); border-radius:999px; padding:.1rem .55rem; vertical-align:middle; }
+</style>
+</head>
+<body>
+<main>
+  <h1>dsh-gdrive</h1>
+  <p class="sub">Google Drive for <a href="https://github.com/lanry702/dsh-chat-window-public">DeepSeek Harness</a> — an MCP server plus a small local plugin. <span class="tag">personal project</span></p>
+
+  <p>DSH ships an MCP manager but no Drive connector. This plugin fills that gap: the model gets
+  <code>mcp__gdrive__search</code>, <code>mcp__gdrive__read</code> and eight sibling tools, and can search,
+  read, upload and organize files in the user's own Drive.</p>
+
+  <h2>How it works</h2>
+  <pre><code>DSH Host
+ └─ plugin @local/dsh-gdrive        resolves node, registers an MCP server
+      └─ ctx.mcpManager.register('gdrive', { transport: 'stdio', … })
+           └─ server.mjs                MCP stdio server, one JSON-RPC message per line
+                └─ Google Drive v3 REST  with an OAuth refresh token kept on this machine</code></pre>
+  <p class="dim">No SDK dependencies: OAuth (PKCE + loopback redirect) and the REST calls are hand-written,
+  so the plugin keeps working across DSH upgrades.</p>
+
+  <h2>Tools</h2>
+  <table>
+    <tr><th>Tool</th><th>What it does</th></tr>
+    <tr><td><code>whoami</code></td><td>Authorized account, grant level, storage usage</td></tr>
+    <tr><td><code>search</code></td><td>Raw Drive <code>q=</code> or friendly predicates (name / full text / mime / folder)</td></tr>
+    <tr><td><code>list</code></td><td>Folder contents, folders first</td></tr>
+    <tr><td><code>read</code></td><td>Docs→markdown, Sheets→CSV, Slides→text; binaries land in a local cache and the path is returned</td></tr>
+    <tr><td><code>download</code></td><td>Save locally; native formats converted (Doc→docx, Sheet→xlsx, Slides→pptx)</td></tr>
+    <tr><td><code>upload</code></td><td>Upload a local file, optionally converting to a Google format</td></tr>
+    <tr><td><code>mkdir</code>, <code>move</code></td><td>Create folders, move or rename entries</td></tr>
+    <tr><td><code>trash</code></td><td>Move to trash, or restore from it</td></tr>
+    <tr><td><code>share</code></td><td>Share with a person, or with anyone holding the link</td></tr>
+  </table>
+
+  <h2>Authorization</h2>
+  <p>Each user runs their own Google Cloud project and OAuth client — the plugin holds no shared credentials.
+  A one-time <code>auth</code> command opens Google's consent screen, receives a refresh token over a loopback
+  redirect, and stores it locally.</p>
+
+  <h2>Data handling</h2>
+  <p>Everything stays on the machine running the plugin. See the
+  <a href="./privacy.html">privacy policy</a> for what is accessed, where it is stored, and how to revoke access.</p>
+
+  <footer>
+    <p><a href="./privacy.html">Privacy policy</a> · <a href="https://github.com/lanry702/dsh-chat-window-public">DeepSeek Harness chat window</a> · contact: lanry702@gmail.com</p>
+  </footer>
+</main>
+</body>
+</html>
